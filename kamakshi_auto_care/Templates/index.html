@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ Auto Shop</title>
+    <style>
+    body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+
+    body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f9;
+    }
+
+    header {
+        background-color: #333;
+        padding: 20px 0;
+    }
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 20px;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+        color: #FFD700;
+    }
+
+        .hero {
+            position: relative;
+            text-align: center;
+            color: black;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        .screwdrive {
+            position: absolute;
+            top: 15%;
+            left: 35%;
+            width: 40%;
+            opacity: 0.25;
+        }
+
+        .gearhexnut {
+            position: absolute;
+            top: 70%;
+            left: 0;
+            width: 30%;
+            opacity: 0.25;
+        }
+
+        .pliers {
+            position: absolute;
+            top: 60%;
+            right: 0;
+            width: 20%;
+            opacity: 0.25;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .overlay h1 {
+            font-size: 68px;
+            font-weight: bold;
+            margin: 0;
+            color: black;
+        }
+
+        .mechanic-image {
+            margin-right: 100px;
+            width: 200px;
+            height: auto;
+            position: absolute;
+            left: 10%; /* Adjust this value to control the horizontal position */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+         <nav>
+    <ul>
+        <li><a href="{% url 'index' %}">HOME</a></li>
+        <li><a href="{% url 'stock' %}">STOCK</a></li>
+        <li><a href="{% url 'order' %}">ORDER</a></li>
+        <li><a href="{% url 'vendors' %}">VENDOR</a></li>
+    </ul>
+</nav>
+    </header>
+    <main>
+        <section class="hero">
+            <img src="https://lcdn-in.icons8.com/c/J7WX5HVq-kOz0KYgp1HggQ/72b884817a02e7b8d94766b8c55bc694c5a951c9.png" alt="Screwdriver" class="screwdrive">
+            <img src="https://lcdn-in.icons8.com/c/J7WX5HVq-kOz0KYgp1HggQ/d3385cb1c0fbfac79132c2e7e7f678fb63c70e3b.png" alt="Gear Hex Nut" class="gearhexnut">
+            <img src="https://lcdn-in.icons8.com/c/J7WX5HVq-kOz0KYgp1HggQ/07a615f4dfb0412098774480b4aae2fec0efe1a3.png" alt="Pliers" class="pliers">
+            <div class="overlay">
+                <h1>KAMAKSHI AUTO CARE</h1>
+            </div>
+            <img src="https://lcdn-in.icons8.com/c/J7WX5HVq-kOz0KYgp1HggQ/d08412ba50902a20ce3e5ef3962dd0e55cb06575.png" alt="Mechanic" class="mechanic-image">
+        </section>
+    </main>
+</body>
+</html>

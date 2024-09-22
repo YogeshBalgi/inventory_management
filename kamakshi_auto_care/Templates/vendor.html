@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>XYZ Auto Shop - Manage Vendors</title>
+    <style>
+        body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+
+        /* Common Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #333;
+            padding: 20px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+
+        main {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        button#openModal {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 30px;
+            font-size: 16px;
+            color: white;
+            background-color: #28A745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#openModal:hover {
+            background-color: #218838;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content form label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .modal-content form input {
+            width: 90%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content button[type="submit"] {
+    padding: 10px;
+    font-size: 14px; /* Reduced font size */
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-end; /* Align button to the right */
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+        .vendor-table {
+            margin-top: 40px;
+        }
+
+        .vendor-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .vendor-table th, .vendor-table td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .vendor-table th {
+            background-color: #333;
+            color: white;
+        }
+
+        .vendor-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .icon-btn.save-btn {
+            color: #28A745;
+        }
+
+        .icon-btn.delete-btn {
+            color: #DC3545;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">HOME</a></li>
+                <li><a href="{% url 'stock' %}">STOCK</a></li>
+                <li><a href="{% url 'order' %}">ORDER</a></li>
+                <li><a href="{% url 'vendors' %}">VENDOR</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Manage Vendors</h1>
+
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search for vendors...">
+        </div>
+
+        <button id="openModal">Add New Vendor</button>
+
+        <!-- Modal for Add Vendor Form -->
+        <div id="vendorModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Add New Vendor</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="vname">Vendor Name:</label>
+                    <input type="text" id="vname" name="vname" required><br><br>
+
+                    <label for="phno">Phone Number:</label>
+                    <input type="text" id="phno" name="phno" required><br><br>
+
+                    <label for="GSTNo">GST Number:</label>
+                    <input type="text" id="GSTNo" name="GSTNo" required><br><br>
+
+                    <label for="Email">Email:</label>
+                    <input type="email" id="Email" name="Email" required><br><br>
+
+                    <label for="Address">Address:</label>
+                    <input type="text" id="Address" name="Address" required><br><br>
+
+                    <button type="submit">Add Vendor</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="vendor-table">
+            <h2>Available Vendors</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>GST Number</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendor in vendors %}
+                    <tr data-id="{{ vendor.Vid }}">
+                        <td contenteditable="true" data-field="vname">{{ vendor.vname }}</td>
+                        <td contenteditable="true" data-field="phno">{{ vendor.phno }}</td>
+                        <td contenteditable="true" data-field="GSTNo">{{ vendor.GSTNo }}</td>
+                        <td contenteditable="true" data-field="Email">{{ vendor.Email }}</td>
+                        <td contenteditable="true" data-field="Address">{{ vendor.Address }}</td>
+                        <td>
+                            <button class="icon-btn save-btn" onclick="saveRow(this)">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" onclick="deleteRow(this)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+    // Inline editing save functionality
+    function saveRow(button) {
+        var row = button.closest('tr');
+        var id = row.dataset.id;
+        var data = {};
+
+        // Collect data from contenteditable fields
+        row.querySelectorAll('[contenteditable]').forEach(function(cell) {
+            data[cell.dataset.field] = cell.textContent.trim();
+        });
+
+        // Send AJAX POST request to save the updated vendor data
+        fetch(`/vendor/update/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',  // CSRF token for security
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);  // Show success message
+            } else {
+                alert(data.message);  // Show error message
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the vendor.');
+        });
+    }
+
+    // Delete row functionality
+    function deleteRow(button) {
+        var row = button.closest('tr');
+        var id = row.dataset.id;
+
+        // Confirm delete action
+        if (confirm('Are you sure you want to delete this vendor?')) {
+            // Send AJAX POST request to delete the vendor
+            fetch(`/vendor/delete/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    row.remove();  // Remove the row from the table
+                    alert(data.message);  // Show success message
+                } else {
+                    alert(data.message);  // Show error message
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the vendor.');
+            });
+        }
+    }
+
+
+        // Search functionality for vendors
+        document.getElementById("search").addEventListener("input", function() {
+            var query = this.value.toLowerCase();
+            var rows = document.querySelectorAll(".vendor-table tbody tr");
+
+            rows.forEach(function(row) {
+                var found = Array.from(row.querySelectorAll("td")).some(function(cell) {
+                    return cell.textContent.toLowerCase().includes(query);
+                });
+                row.style.display = found ? "" : "none";
+            });
+        });
+
+        // Modal functionality for adding a vendor
+        var modal = document.getElementById("vendorModal");
+        var btn = document.getElementById("openModal");
+        var span = document.getElementById("closeModal");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>XYZ Auto Shop</title>
+    <style>
+         .your-element-class {
+    overflow: scroll; /* or overflow: scroll; */
+    }
+
+    .your-element-class::-webkit-scrollbar {
+    display: none;
+    }
+        body {
+            
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #333;
+            padding: 20px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+
+        main {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-bar input, .search-bar select {
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar select {
+            width: auto;
+            margin-left: 10px;
+        }
+
+        button#openModal {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 30px;
+            font-size: 16px;
+            color: white;
+            background-color: #28A745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#openModal:hover {
+            background-color: #218838;
+        }
+
+       .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding-top: 60px;
+}
+
+/* Style for modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Adjusted width */
+    max-width: 600px; /* Optional: limit the maximum width */
+    border-radius: 10px;
+}
+
+/* Style for form elements inside the modal */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch form elements */
+}
+
+/* Style for form labels and inputs */
+.modal-content form label {
+    font-size: 14px; /* Reduced font size */
+    margin-bottom: 5px; /* Reduced margin */
+}
+
+.modal-content form input, 
+.modal-content form select {
+    width: 100%; /* Full width within the modal */
+    padding: 10px;
+    font-size: 14px; /* Reduced font size */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Reduced margin */
+}
+
+/* Style for submit button */
+.modal-content button[type="submit"] {
+    padding: 10px;
+    font-size: 14px; /* Reduced font size */
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-end; /* Align button to the right */
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.modal-content form label {
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold; /* Make labels bold */
+    margin-bottom: 5px; /* Space between label and input */
+    color: #333; /* Color for better readability */
+}
+
+/* Optional: Style for input fields and select elements */
+.modal-content form input, 
+.modal-content form select {
+    width: 90%; /* Full width within the modal */
+    padding: 12px; /* Adjust padding for better spacing */
+    font-size: 16px; /* Adjust font size to match label */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Space below input fields */
+}
+        .stock-table {
+            margin-top: 40px;
+        }
+
+        .stock-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stock-table th, .stock-table td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stock-table th {
+            background-color: #333;
+            color: white;
+        }
+
+        .stock-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .icon-btn.save-btn {
+            color: #28A745;
+        }
+
+        .icon-btn.delete-btn {
+            color: #DC3545;
+        }
+
+       
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+    <ul>
+        <li><a href="{% url 'index' %}">HOME</a></li>
+        <li><a href="{% url 'stock' %}">STOCK</a></li>
+        <li><a href="{% url 'order' %}">ORDER</a></li>
+        <li><a href="#">ADMIN</a></li>
+    </ul>
+</nav>
+    </header>
+
+    <main>
+        <h1>Manage Stock</h1>
+
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search for stock items...">
+            <select id="modelFilter">
+                <option value="">All Models</option>
+                {% for model in unique_models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button id="openModal">Add New Stock</button>
+
+        <!-- Modal for Add Stock Form -->
+        <div id="stockModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Add New Stock</h2>
+                <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="add_stock" value="true">
+                        <label for="sname">Stock Name:</label>
+                        <input type="text" id="sname" name="sname" required><br><br>
+                        <label for="Model">Model:</label>
+                        <input type="text" id="Model" name="Model" required><br><br>
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price" step="0.01" required><br><br>
+                        <label for="Qty">Quantity:</label>
+                        <input type="number" id="Qty" name="Qty" required><br><br>
+                        <label for="vendor">Vendor:</label>
+                        <select id="vendor" name="vendor_id" required>
+                            {% for vendor in vendors %}
+                                <option value="{{ vendor.Vid }}">{{ vendor.vname }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                        <button type="submit">Add Stock</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="stock-table">
+            <h2>Available Stock</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Model</th>
+                        <th>Price</th>
+                        <th>Selling Price</th>
+                        <th>Quantity</th>
+                        <th>Vendor</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in stock_items %}
+                    <tr data-id="{{ item.sid }}">
+                        <td contenteditable="true" data-field="sname">{{ item.sname }}</td>
+                        <td contenteditable="true" data-field="Model">{{ item.Model }}</td>
+                        <td contenteditable="true" data-field="price">{{ item.price }}</td>
+                        <td>{{ item.sprice }}</td>
+                        <td contenteditable="true" data-field="Qty">{{ item.Qty }}</td>
+                         <td>
+        <select name="vendor">
+            {% for vendor in vendors %}
+                <option value="{{ vendor.Vid }}" {% if item.Vid == vendor %}selected{% endif %}>
+                    {{ vendor.vname }}
+                </option>
+            {% endfor %}
+        </select>
+    </td>
+                        <td>
+                            <button class="icon-btn save-btn" onclick="saveRow(this)">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button class="icon-btn delete-btn" onclick="deleteRow(this)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+    <script>
+        // Search functionality
+        
+
+        // Function to filter stock based on search input and model filter
+function filterStock() {
+    var query = document.getElementById("search").value.toLowerCase();
+    var selectedModel = document.getElementById("modelFilter").value;
+    var rows = document.querySelectorAll(".stock-table tbody tr");
+
+    rows.forEach(function(row) {
+        var cells = row.querySelectorAll("td");
+        var model = cells[1].textContent; // Assuming Model is in the second cell
+        var found = Array.from(cells).some(function(cell) {
+            return cell.textContent.toLowerCase().includes(query);
+        });
+
+        var modelMatch = (selectedModel === "" || model === selectedModel);
+        row.style.display = found && modelMatch ? "" : "none";
+    });
+}
+
+// Search functionality
+document.getElementById("search").addEventListener("input", filterStock);
+
+// Model filter functionality
+document.getElementById("modelFilter").addEventListener("change", filterStock);
+
+        // Inline editing save functionality
+       function saveRow(button) {
+    var row = button.closest('tr');
+    var sid = row.getAttribute('data-id');
+
+    // Collect all updated fields
+    var updatedData = {};
+    row.querySelectorAll('[contenteditable=true]').forEach(function(cell) {
+        var field = cell.getAttribute('data-field');
+        var value = cell.textContent.trim();
+        updatedData[field] = value;
+    });
+
+    // Get the selected vendor from the dropdown
+    var vendorSelect = row.querySelector('select[name="vendor"]');
+    if (vendorSelect) {
+        updatedData['vendor_id'] = vendorSelect.value;
+    }
+
+    // Send an AJAX POST request to save the updated data
+    fetch("{% url 'update_stock' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+            sid: sid,
+            ...updatedData
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Stock updated successfully!");
+        } else {
+            alert("Error updating stock. Please try again.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+        // Delete row functionality
+        function deleteRow(button) {
+            var row = button.closest('tr');
+            var sid = row.getAttribute('data-id');
+
+            if (confirm("Are you sure you want to delete this item?")) {
+                fetch("{% url 'delete_stock' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({ sid: sid })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        row.remove();
+                        alert("Stock deleted successfully!");
+                    } else {
+                        alert("Error deleting stock. Please try again.");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        }
+
+        // Modal for Add Stock Form
+        var modal = document.getElementById("stockModal");
+        var btn = document.getElementById("openModal");
+        var span = document.getElementById("closeModal");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html> 
